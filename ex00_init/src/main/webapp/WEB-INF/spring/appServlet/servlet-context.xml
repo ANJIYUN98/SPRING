@@ -26,3 +26,11 @@
 	
 	
 </beans:beans>
+
+
+<!-- 
+	FrontController 역할을 하는 DispatherServlet 설정 파일
+	정적 자원의 경로(css, js..) 지정
+	MVC Component(@Controller, @Service, @Repository...)에노테이션 활성화
+	View Resolving 등 설정
+ -->
