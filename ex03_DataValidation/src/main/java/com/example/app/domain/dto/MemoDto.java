@@ -27,7 +27,7 @@ public class MemoDto {
 	@Min(value=10, message="최소 숫자는 10이상 이어야 합니다.")
 	@Max(value=1000, message="최대 숫자는 1000이하 이어야 합니다.")
 	@NotNull(message="ID를 입력하세요")
-	private int id;
+	private Integer id;
 	
 	@NotBlank(message="TEXT를 입력하세요.")
 	private String text;
