@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.app.domain.mapper.BoardMapper">
+	<resultMap id="BoardResultMap2" type="java.util.HashMap">
+		<id property="id" column="id" />
+		<result property="title" column="title" />
+		<result property="contents" column="contents" />
+		<result property="writer" column="writer" />
+		<result property="regDate" column="regDate" />
+	</resultMap>
+
+	<insert id="InsertXML" parameterType="com.example.app.domain.dto.BoardDto">
+		insert into tbl_board values(#{id},#{title},#{contents},#{writer},#{regDate})
+	</insert>
+	
+	<update id="UpdateXML" parameterType="com.example.app.domain.dto.BoardDto">
+		update tbl_board set title=#{title}, contents=#{contents}, writer=#{writer}, regDate=#{regDate} where id=#{id}
+	</update>
+	
+	<delete id="DeleteXML" parameterType="int">
+		delete from tbl_board where id=#{id}
+	</delete>
+	
+	<select id="SelectAtXML" parameterType="int" resultType="com.example.app.domain.dto.BoardDto">
+		select * from tbl_board where id=#{id}
+	</select>
+	<select id="SelectAllXML" resultType="com.example.app.domain.dto.BoardDto">
+		select * from tbl_board
+	</select>
+	
+	<select id="SelectAllResultMapXML">
+		select * from tbl_board
+	</select>
+</mapper>
