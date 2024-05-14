@@ -1,5 +1,7 @@
 package com.example.app.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,9 +11,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.example.app.config.auth.PrincipalDetailsService;
+import com.example.app.config.auth.exception.CustomAccessDeniedHandler;
+import com.example.app.config.auth.exception.CustomAuthenticationEntryPoint;
+import com.example.app.config.auth.loginHandler.CustomAuthenticationFailureHandler;
 import com.example.app.config.auth.loginHandler.CustomLoginSuccessHandler;
+import com.example.app.config.auth.logoutHandler.CustomLogoutHandler;
+import com.example.app.config.auth.logoutHandler.CustomLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -47,13 +56,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.formLogin()
 			.loginPage("/login")
 			.permitAll()
-			.successHandler(new CustomLoginSuccessHandler());
+			.successHandler(new CustomLoginSuccessHandler())
+			.failureHandler(new CustomAuthenticationFailureHandler());
 		
 		//로그아웃
 		http.logout()
 			.logoutUrl("/logout")
-			.permitAll();
+			//.logoutSuccessUrl("/")		//logoutSuccessHandler와 같이 logoutSuccessHandler
+			.permitAll()
+			.addLogoutHandler(new CustomLogoutHandler())
+			.logoutSuccessHandler(new CustomLogoutSuccessHandler());
+		
+		//예외처리
+		http.exceptionHandling()
+			.authenticationEntryPoint(new CustomAuthenticationEntryPoint())	//미인증 사용자를 처리	
+			.accessDeniedHandler(new CustomAccessDeniedHandler())	//권한 실패시 예외처리
+			;
+		
+		//REMEMBER_ME
+		http.rememberMe()
+			.key("rememberMeKey")
+			.rememberMeParameter("remember-me")
+			.alwaysRemember(false)	//체크하면 활성화
+			.tokenValiditySeconds(60*60)
+			.tokenRepository(tokenRepository());
 	}
+	
+	@Autowired
+	private DataSource dataSource3;
+	
+	@Bean
+	public PersistentTokenRepository tokenRepository() {
+		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+		repo.setDataSource(dataSource3);
+		return repo;
+	} //토큰 레파지토리만들어서 remember_me 값을 db로 저장
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {

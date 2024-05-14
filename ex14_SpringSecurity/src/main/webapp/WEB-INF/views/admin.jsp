@@ -18,5 +18,9 @@
 	ROLE : <sec:authentication property="principal.userDto.role"/><br>
 	ISAUTHENTICATED : <sec:authorize access="isAuthenticated()">LOGINED...</sec:authorize>
 	
+	<form action="${pageContext.request.contextPath}/logout" methoo="post">
+		<button>logout</button>
+	</form>
+	
 </body>
 </html>		

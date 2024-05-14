@@ -13,12 +13,14 @@
 	<form action="${pageContext.request.contextPath}/login" method="post">
 		<input name="username"> <br>
 		<input name="password"> <br>
+		<input type="checkbox" name="remember-me" /> REMEMBER_ME<br>
 		<button>로그인</button>
 		
 		<!-- CSRF TOKEN 전달 -->
 		<%-- <input type="hidden" name="_csrf" value="${_csrf.token}" /> --%>
 	</form>
 	
+	MSG : ${msg} <br>
 	
 </body>
 </html>

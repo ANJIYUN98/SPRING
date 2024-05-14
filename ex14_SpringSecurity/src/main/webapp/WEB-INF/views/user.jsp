@@ -22,5 +22,9 @@
 	${isAuthenticated}
 	<hr>
 	
+	<form action="${pageContext.request.contextPath}/logout" methoo="post">
+		<button>logout</button>
+	</form>
+	
 </body>
 </html>	
